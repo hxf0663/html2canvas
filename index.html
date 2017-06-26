@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<!--此网页演示了html2canvas网页截图下载 -->	
+	<head>
+		<script type="text/javascript" src="html2canvas.js"></script>
+		<script type="text/javascript" src="http://www.boolaw.com/tpl/default/js/jquery-1.8.3.min.js"></script>
+		<title>html2canvas网页截图</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<!--需要注意的是,这里一定要等待js库和网页加载完毕后再执行函数  -->
+		<!-- html2canvas()中,第一个参数是要截图的Dom对象，第二个参数是渲染完成后回调的canvas对象。  -->		
+		<script type="text/javascript">
+			$(function(){	
+				print();
+			});
+			function print(){	
+				html2canvas( $("#bc") ,{  		
+					onrendered: function(canvas){
+						$('#down_button').attr( 'href' , canvas.toDataURL() ) ;
+						$('#down_button').attr( 'download' , 'myjobdeer.png' ) ;
+						var html_canvas = canvas.toDataURL();
+						$.post('upload.php', {html_canvas:html_canvas}, function(json){
+						}, 'json');
+					}
+				});
+			}
+		</script>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	</head>
+	<body>
+		<div id="canv">
+			此网页演示了html2canvas截图后将截图后的网页追加到了原网页之上<br>
+			<button onClick="print()">这是个按钮</button><br>
+			<input type="text">
+			<span style="color:blue; text-shadow: 5px 5px 5px #FF0000;">我是中国人</span><br>
+			<div id="test" style="width:429px; height:585px; border-radius:100px; background:url('syz.jpg')"></div>
+			<div id="bc" style="width:300px; height:200px;">
+				<canvas width="300" height="200" style="background-color:blue; border-radius:100px;"></canvas>
+				<div style="width:300px; height:300px; margin-top:-250px; position:absolute; z-index:2; background:url('tf.png') no-repeat"><div>
+			</div>
+			<br>
+			这里可以看作是边界线<hr/>
+		</div>
+		<a type="button" id="down_button">下载</a>
+	</body>
+</html>
